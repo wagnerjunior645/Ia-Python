@@ -1,0 +1,4 @@
+1 - My use will be restricted to academic part merely this.
+2 - I intend to analyze the twitters of any user just to see the twitters posted by him.
+3 - I have no intention of posting or retweting
+4 - n no way will the users' tweets be exposed, they will only be used for a job in which you will be a user to create a prototype recommendation system proposed by my professor in computer science
