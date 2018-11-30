@@ -4,10 +4,17 @@ from string import punctuation
 
 import requests
 import json
-
+import re
 from twython import Twython
 
+from sklearn.feature_extraction.text import TfidfVectorizer
+
 stopWords = [
+    'co',
+    't',
+    'https',
+    'RT',
+    'rt',
     'de',
     'a',
     'o',
@@ -251,20 +258,63 @@ def homepage(request, post_id):
     # print(user_timeline)
     arrayFinal = []
     for tweets in user_timeline:
-        print(tweets['text'])
+        # print(tweets['text'])
         palavra = removerCaracteresEspeciais(tweets['text'])
-        print(palavra)
+        # print(palavra)
         arrayPalavra = palavra.split(' ')
+
+        palavraLoop = ""
 
         for bbc in arrayPalavra:
             if bbc not in stopWords:
-                arrayFinal.append(bbc)
+                # arrayFinal.append(bbc)
+                bbc = re.sub(r'[^\w]', ' ', bbc)
+                palavraLoop += bbc + " "
 
-    print(arrayFinal)
+        arrayFinal.append(palavraLoop)
 
+    # print(arrayFinal)
+
+    # Essa parte tfidf
+    tfidf = TfidfVectorizer()
+    responseTFIDF = tfidf.fit_transform(arrayFinal)
+    feature_names = tfidf.get_feature_names()
+
+    finalFinal = []
+
+    for col in responseTFIDF.nonzero()[1]:
+        if responseTFIDF[0, col] > 0 :
+            finalFinal.append({'q':feature_names[col], 'value': responseTFIDF[0, col]})
+        # print (feature_names[col], ' - ', responseTFIDF[0, col])
+
+    # print(finalFinal)
+
+    newlist = sorted(finalFinal, key=lambda k: k['value']) 
+    print (newlist)
+
+    # Fim tfidf
     # frase1 = 'wagner, júnior meu ovo legal para você'
-
     # fraseArray = frase1.split(' ')
+
+    arrayTemplate = []
+    count = 1
+    for i in reversed(newlist):
+        count =+ 1
+        print(i['q'])
+        queryUrl = 'https://newsapi.org/v2/everything?' + 'q=' + str(i['q']) + '&' + 'language=pt&' + 'sortBy=popularity&' + 'apiKey=a59b3dfb9d3f410f86db9bf2b505be0a'
+        url = (queryUrl)
+        res = requests.get(url)
+        for xx in res.json()['articles']:
+            arrayTemplate.append(xx)
+
+        if count >= 3:
+            print('entrou')
+            break
+
+    # print(arrayTemplate)
+    # print('----____------__---_--_----')
+
+    countTemplate = len(arrayTemplate)
 
     queryUrl_site2 = "http://webhose.io/filterWebContent?token=b1b86608-f5dc-41e3-89c9-5f9bbbdf0a0f&format=json&ts=1540037188321&sort=crawled&" + "q=" + str(post_id) + "%20language%3Aenglish"
     queryUrl = 'https://newsapi.org/v2/everything?' + 'q=' + str(post_id) + '&' + 'language=pt&' + 'sortBy=popularity&' + 'apiKey=a59b3dfb9d3f410f86db9bf2b505be0a'
@@ -289,7 +339,7 @@ def homepage(request, post_id):
         artigos.append(j)
 
     countArtigos = len(artigos)
-    return render(request, 'index.html', {'artigos': artigos, 'countArtigos': countArtigos})
+    return render(request, 'index.html', {'artigos': arrayTemplate, 'countArtigos': countTemplate})
 
 
 # Retirar acentuacao

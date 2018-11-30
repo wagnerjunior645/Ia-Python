@@ -2,3 +2,36 @@
 2 - I intend to analyze the twitters of any user just to see the twitters posted by him.
 3 - I have no intention of posting or retweting
 4 - n no way will the users' tweets be exposed, they will only be used for a job in which you will be a user to create a prototype recommendation system proposed by my professor in computer science
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- Anotacoes para o exercicio de ia Python --
+
+1-letra (A)
+***Resposta Abaixo:***
+
+
+**KNN:**
+*Então como Estudamos o Knn tem como primordio classificar , como assim? deacordo com os atributos ele acaba agrupando os dados que tiverem correlaçao maior entre se, usando por exemplo a distanci euclidiana que mediria onde esse objeto poderia estar no plano. Uma grande desvantagem é seu custocomputacional já que para cada novo objeto devemos comparar ele com todos os outros para que então possamos os agrupar*
+-
+-
+-
+**Regressão Linear:**
+*Tem como funcção também agrupar mas sua principal função seria predefinir oque poderia acontecer como um novo objeto que podera ser a inserido. A regressao utiliza o R-squared ou coeficiente de determinação para calcular oquao acuraci que pode ver os valores que estão sendo observados*
